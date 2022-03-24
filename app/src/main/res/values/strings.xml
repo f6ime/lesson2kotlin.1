@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">lesson2kotlin1</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="location_s">Location\'s</string>
+    <string name="type">Type</string>
+    <string name="measurement">Measurement</string>
+    <string name="episode_s">Episode\'s</string>
+    <string name="release_date">Release date</string>
+</resources>
