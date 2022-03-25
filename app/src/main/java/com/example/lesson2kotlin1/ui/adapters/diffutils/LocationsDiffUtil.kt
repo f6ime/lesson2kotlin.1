@@ -1,7 +1,7 @@
-package com.example.lesson2kotlin1.adapters.diffutils
+package com.example.lesson2kotlin1.ui.adapters.diffutils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.lesson2kotlin1.data.remote.models.location.RickAndMortyLocation
+import com.example.lesson2kotlin1.models.location.RickAndMortyLocation
 
 class LocationsDiffUtil : DiffUtil.ItemCallback<RickAndMortyLocation>() {
     override fun areItemsTheSame(

@@ -1,20 +1,21 @@
-package com.example.lesson2kotlin1.adapters
+package com.example.lesson2kotlin1.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lesson2kotlin1.R
-import com.example.lesson2kotlin1.adapters.diffutils.CharactersDiffUtil
+import com.example.lesson2kotlin1.ui.adapters.diffutils.CharactersDiffUtil
 import com.example.lesson2kotlin1.common.extension.setImage
-import com.example.lesson2kotlin1.data.remote.models.character.RickAndMortyCharacter
+import com.example.lesson2kotlin1.models.character.RickAndMortyCharacter
 import com.example.lesson2kotlin1.databinding.ItemCharactersHolderBinding
 
 class CharactersAdapter(private val onItemCharactersClick: (id: Int) -> Unit) :
-    ListAdapter<RickAndMortyCharacter, CharactersAdapter.CharacterViewHolder>(CharactersDiffUtil()) {
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder.onBind(getItem(position))
-    }
+    PagingDataAdapter<RickAndMortyCharacter, CharactersAdapter.CharacterViewHolder>(
+        CharacterComparator
+    ) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
@@ -24,6 +25,10 @@ class CharactersAdapter(private val onItemCharactersClick: (id: Int) -> Unit) :
                 parent, false
             )
         )
+    }
+
+    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
+        getItem(position)?.let { holder.onBind(it) }
     }
 
     inner class CharacterViewHolder(private val binding: ItemCharactersHolderBinding) :
@@ -51,5 +56,17 @@ class CharactersAdapter(private val onItemCharactersClick: (id: Int) -> Unit) :
                 }
             }
         }
+    }
+
+    object CharacterComparator : DiffUtil.ItemCallback<RickAndMortyCharacter>() {
+        override fun areItemsTheSame(
+            oldItem: RickAndMortyCharacter,
+            newItem: RickAndMortyCharacter
+        ): Boolean = oldItem.id == newItem.id
+
+        override fun areContentsTheSame(
+            oldItem: RickAndMortyCharacter,
+            newItem: RickAndMortyCharacter
+        ): Boolean = oldItem == newItem
     }
 }

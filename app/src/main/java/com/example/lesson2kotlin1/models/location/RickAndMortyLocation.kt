@@ -1,4 +1,4 @@
-package com.example.lesson2kotlin1.data.remote.models.location
+package com.example.lesson2kotlin1.models.location
 
 import com.google.gson.annotations.SerializedName
 

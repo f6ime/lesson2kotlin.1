@@ -16,29 +16,26 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DescriptionCharectersFragment : BaseFragment<FragmentDescriptionCharactersBinding, CharacterDetailsViewModel>(
-R.layout.fragment_description_characters) {
-    override val binding by viewBinding(FragmentDescriptionCharactersBinding::bind)
+R.layout.fragment_description_characters
+) {
+    override val binding: FragmentDescriptionCharactersBinding by viewBinding(FragmentDescriptionCharactersBinding::bind)
     override val viewModel: CharacterDetailsViewModel by viewModels()
     private val args: DescriptionCharectersFragmentArgs by navArgs()
 
 
-    override fun setupViews() {
-    }
-
     override fun setupObserver() {
         subscribeToCharacters()
     }
-
 
     private fun subscribeToCharacters() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fetchSingleCharacter(args.characterId).observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Loading -> {
-                        Log.e("GayPop", "Loading ")
+                        Log.e("ololo", "Loading ")
                     }
                     is Resource.Error -> {
-                        Log.e("GayPop", it.message.toString())
+                        Log.e("ololo", it.message.toString())
                     }
                     is Resource.Success -> {
                         binding.tvCharacter.text = it.data?.name

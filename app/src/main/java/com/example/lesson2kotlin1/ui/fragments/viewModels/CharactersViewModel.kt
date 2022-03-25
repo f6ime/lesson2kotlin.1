@@ -1,5 +1,7 @@
 package com.example.lesson2kotlin1.ui.fragments.viewModels
 
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.example.lesson2kotlin1.base.view_model_base.BaseViewModel
 import com.example.lesson2kotlin1.data.repositories.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,8 +13,6 @@ class CharactersViewModel @Inject constructor(
 
 
     fun fetchCharacters() =
-        characterRepository.fetchCharacters()
-
-
+        characterRepository.fetchCharacters().cachedIn(viewModelScope)
 }
 

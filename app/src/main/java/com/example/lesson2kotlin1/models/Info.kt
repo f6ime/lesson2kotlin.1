@@ -1,4 +1,4 @@
-package com.example.lesson2kotlin1.data.remote.models
+package com.example.lesson2kotlin1.models
 
 data class Info(
     val count: Int,
