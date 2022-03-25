@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration.Builder(
             R.id.charactersFragment,
             R.id.locationsFragment,
-            R.id.episodesFragment
+            R.id.episodeFragment //episodesFragment
         ).build()
         NavigationUI.setupWithNavController(binding.toolbar, navController, appBarConfiguration)
         binding.bottomNavigation.itemIconTintList = null

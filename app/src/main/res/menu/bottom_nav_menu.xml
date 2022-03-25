@@ -12,7 +12,7 @@
         android:icon="@drawable/icon_location"
         android:title="Locations" />
     <item
-        android:id="@+id/episodesFragment"
+        android:id="@+id/episodeFragment"
         android:enabled="true"
         android:icon="@drawable/icon_episode"
         android:title="Episodes" />
