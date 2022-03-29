@@ -7,6 +7,7 @@ import com.example.lesson2kotlin1.R
 import com.example.lesson2kotlin1.ui.adapters.LocationsAdapter
 import com.example.lesson2kotlin1.base.BaseFragment
 import com.example.lesson2kotlin1.databinding.FragmentLocationsBinding
+import com.example.lesson2kotlin1.ui.adapters.loader.LoadingLoaderStateAdapter
 import com.example.lesson2kotlin1.ui.fragments.viewModels.LocationsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -27,6 +28,12 @@ class LocationsFragment : BaseFragment<FragmentLocationsBinding, LocationsViewMo
 
     private fun setupAdapter() {
         binding.recyclerview.adapter = locationAdapter
+        binding.apply {
+            recyclerview.adapter = locationAdapter.withLoadStateHeaderAndFooter(
+                header = LoadingLoaderStateAdapter { locationAdapter.retry() },
+                footer = LoadingLoaderStateAdapter { locationAdapter.retry() }
+            )
+        }
     }
 
     override fun setupObserver() {

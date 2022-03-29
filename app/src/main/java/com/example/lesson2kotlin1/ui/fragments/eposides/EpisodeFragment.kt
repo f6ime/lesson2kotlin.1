@@ -7,6 +7,7 @@ import com.example.lesson2kotlin1.R
 import com.example.lesson2kotlin1.ui.adapters.EposidesAdapter
 import com.example.lesson2kotlin1.base.BaseFragment
 import com.example.lesson2kotlin1.databinding.FragmentEpisodeBinding
+import com.example.lesson2kotlin1.ui.adapters.loader.LoadingLoaderStateAdapter
 import com.example.lesson2kotlin1.ui.fragments.viewModels.EpisodesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -23,6 +24,12 @@ class EpisodeFragment : BaseFragment<FragmentEpisodeBinding, EpisodesViewModel>(
 
     private fun setupAdapter() {
         binding.recyclerview.adapter = episodeAdapter
+        binding.apply {
+            recyclerview.adapter = episodeAdapter.withLoadStateHeaderAndFooter(
+                header = LoadingLoaderStateAdapter { episodeAdapter.retry() },
+                footer = LoadingLoaderStateAdapter { episodeAdapter.retry() }
+            )
+        }
     }
 
     override fun setupObserver() {
