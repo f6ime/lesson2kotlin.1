@@ -10,6 +10,7 @@ import java.io.IOException
 
 const val CHARACTER_KEY = 1
 
+
 class CharacterPagingSource(private val service: CharactersApiService) :
 PagingSource<Int, RickAndMortyCharacter>() {
 

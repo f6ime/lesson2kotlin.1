@@ -8,7 +8,7 @@ import com.example.lesson2kotlin1.R
 import com.example.lesson2kotlin1.ui.adapters.CharactersAdapter
 import com.example.lesson2kotlin1.base.BaseFragment
 import com.example.lesson2kotlin1.databinding.FragmentCharactersBinding
-import com.example.lesson2kotlin1.models.character.RickAndMortyCharacter
+import com.example.lesson2kotlin1.ui.adapters.loader.LoadingLoaderStateAdapter
 import com.example.lesson2kotlin1.ui.fragments.viewModels.CharactersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -21,7 +21,6 @@ class CharactersFragment : BaseFragment<FragmentCharactersBinding, CharactersVie
     override val binding by viewBinding(FragmentCharactersBinding::bind)
     override val viewModel: CharactersViewModel by viewModels()
 
-
     private val characterAdapter = CharactersAdapter(this::onItemClick)
     override fun setupViews() {
         setupAdapter()
@@ -29,6 +28,12 @@ class CharactersFragment : BaseFragment<FragmentCharactersBinding, CharactersVie
 
     private fun setupAdapter() {
         binding.recyclerview.adapter = characterAdapter
+        binding.apply {
+            recyclerview.adapter = characterAdapter.withLoadStateHeaderAndFooter(
+                header = LoadingLoaderStateAdapter { characterAdapter.retry() },
+                footer = LoadingLoaderStateAdapter { characterAdapter.retry() }
+            )
+        }
     }
 
     override fun setupObserver() {
