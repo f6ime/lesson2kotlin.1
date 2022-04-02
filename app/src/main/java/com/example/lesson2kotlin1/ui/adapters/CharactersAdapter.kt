@@ -2,21 +2,18 @@ package com.example.lesson2kotlin1.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lesson2kotlin1.R
-import com.example.lesson2kotlin1.ui.adapters.diffutils.CharactersDiffUtil
+import com.example.lesson2kotlin1.base.diff_utils.BaseDiffUtils
 import com.example.lesson2kotlin1.common.extension.setImage
 import com.example.lesson2kotlin1.models.character.RickAndMortyCharacter
 import com.example.lesson2kotlin1.databinding.ItemCharactersHolderBinding
 
 class CharactersAdapter(private val onItemCharactersClick: (id: Int) -> Unit) :
-    PagingDataAdapter<RickAndMortyCharacter, CharactersAdapter.CharacterViewHolder>(
-        CharacterComparator
+    ListAdapter<RickAndMortyCharacter, CharactersAdapter.CharacterViewHolder>(
+        BaseDiffUtils()
     ) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         return CharacterViewHolder(
@@ -56,17 +53,5 @@ class CharactersAdapter(private val onItemCharactersClick: (id: Int) -> Unit) :
                 }
             }
         }
-    }
-
-    object CharacterComparator : DiffUtil.ItemCallback<RickAndMortyCharacter>() {
-        override fun areItemsTheSame(
-            oldItem: RickAndMortyCharacter,
-            newItem: RickAndMortyCharacter
-        ): Boolean = oldItem.id == newItem.id
-
-        override fun areContentsTheSame(
-            oldItem: RickAndMortyCharacter,
-            newItem: RickAndMortyCharacter
-        ): Boolean = oldItem == newItem
     }
 }

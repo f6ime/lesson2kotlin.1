@@ -1,10 +1,11 @@
 package com.example.lesson2kotlin1.models.character
 
+import com.example.lesson2kotlin1.base.diff_model.BaseDiffModel
 import com.google.gson.annotations.SerializedName
 
 data class RickAndMortyCharacter(
     @SerializedName("id")
-    val id: Int,
+    override val id: Int,
     @SerializedName("name")
     val name: String,
     @SerializedName("status")
@@ -21,4 +22,4 @@ data class RickAndMortyCharacter(
     val location: Location,
     @SerializedName("image")
     val image: String,
-)
+) : BaseDiffModel

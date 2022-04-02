@@ -10,7 +10,7 @@ import com.example.lesson2kotlin1.base.BaseFragment
 import com.example.lesson2kotlin1.common.extension.setImage
 import com.example.lesson2kotlin1.common.resourse.Resource
 import com.example.lesson2kotlin1.databinding.FragmentDescriptionCharactersBinding
-import com.example.lesson2kotlin1.ui.fragments.viewModels.CharacterDetailsViewModel
+import com.example.lesson2kotlin1.ui.fragments.characters.details.CharacterDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class DescriptionCharectersFragment : BaseFragment<FragmentDescriptionCharactersBinding, CharacterDetailsViewModel>(
 R.layout.fragment_description_characters
 ) {
-    override val binding: FragmentDescriptionCharactersBinding by viewBinding(FragmentDescriptionCharactersBinding::bind)
+    override val binding by viewBinding(FragmentDescriptionCharactersBinding::bind)
     override val viewModel: CharacterDetailsViewModel by viewModels()
     private val args: DescriptionCharectersFragmentArgs by navArgs()
 
@@ -29,17 +29,19 @@ R.layout.fragment_description_characters
 
     private fun subscribeToCharacters() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.fetchSingleCharacter(args.characterId).observe(viewLifecycleOwner) {
+            viewModel.fetchSingleCharacter(args.characterId).collect {
                 when (it) {
                     is Resource.Loading -> {
-                        Log.e("ololo", "Loading ")
+                        Log.e("ololo", "Loading")
                     }
                     is Resource.Error -> {
                         Log.e("ololo", it.message.toString())
                     }
                     is Resource.Success -> {
-                        binding.tvCharacter.text = it.data?.name
-                        it.data?.image?.let { it1 -> binding.imCharacter.setImage(it1) }
+                        binding.apply {
+                            it.data?.image?.let { it1 -> imCharacter.setImage(it1) }
+                            tvCharacter.text = it.data?.name
+                        }
                     }
                 }
             }

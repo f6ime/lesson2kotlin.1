@@ -2,15 +2,15 @@ package com.example.lesson2kotlin1.ui.fragments.locations
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.lesson2kotlin1.R
 import com.example.lesson2kotlin1.ui.adapters.LocationsAdapter
 import com.example.lesson2kotlin1.base.BaseFragment
+import com.example.lesson2kotlin1.common.extension.sendData
 import com.example.lesson2kotlin1.databinding.FragmentLocationsBinding
-import com.example.lesson2kotlin1.ui.adapters.loader.LoadingLoaderStateAdapter
-import com.example.lesson2kotlin1.ui.fragments.viewModels.LocationsViewModel
+import com.example.lesson2kotlin1.utils.PaginationScrollListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -27,12 +27,14 @@ class LocationsFragment : BaseFragment<FragmentLocationsBinding, LocationsViewMo
     }
 
     private fun setupAdapter() {
-        binding.recyclerview.adapter = locationAdapter
-        binding.apply {
-            recyclerview.adapter = locationAdapter.withLoadStateHeaderAndFooter(
-                header = LoadingLoaderStateAdapter { locationAdapter.retry() },
-                footer = LoadingLoaderStateAdapter { locationAdapter.retry() }
-            )
+        binding.recyclerview.apply {
+            adapter = locationAdapter
+            val linearLayoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
+            addOnScrollListener(object :
+                PaginationScrollListener(linearLayoutManager, { viewModel.fetchLocations() }) {
+                override fun isLoading() = viewModel.isLoading
+            })
         }
     }
 
@@ -42,8 +44,8 @@ class LocationsFragment : BaseFragment<FragmentLocationsBinding, LocationsViewMo
 
     private fun subscribeToLocations() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.fetchLocations().collectLatest {
-                locationAdapter.submitData(it)
+            viewModel.locationState.observe(viewLifecycleOwner) {
+                locationAdapter.sendData(it)
             }
         }
     }

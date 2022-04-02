@@ -7,6 +7,5 @@ data class RickAndMortyResponse<T>(
     val info: Info,
     @SerializedName("results")
     val results: ArrayList<T>
-
 )
 
