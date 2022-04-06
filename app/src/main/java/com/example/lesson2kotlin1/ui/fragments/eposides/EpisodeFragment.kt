@@ -1,5 +1,7 @@
 package com.example.lesson2kotlin1.ui.fragments.eposides
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,13 +38,29 @@ class EpisodeFragment : BaseFragment<FragmentEpisodeBinding, EpisodesViewModel>(
 
     override fun setupObserver() {
         subscribeToEpisodes()
+        subscribeToEpisodesLocale()
     }
 
     private fun subscribeToEpisodes() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.episodesState.observe(viewLifecycleOwner) {
-                episodeAdapter.sendData(it)
-            }
+        viewModel.episodesState.observe(viewLifecycleOwner) {
+            episodeAdapter.sendData(it.results)
         }
+    }
+
+    private fun subscribeToEpisodesLocale() {
+        viewModel.episodesLocalState.observe(viewLifecycleOwner) {
+            episodeAdapter.sendData(it)
+        }
+    }
+
+    override fun setupRequest() {
+        if (viewModel.episodesState.value == null && isOnline()) viewModel.fetchEpisodes()
+        else viewModel.getEpisodes()
+    }
+
+    fun isOnline(): Boolean {
+        val cm = requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
     }
 }

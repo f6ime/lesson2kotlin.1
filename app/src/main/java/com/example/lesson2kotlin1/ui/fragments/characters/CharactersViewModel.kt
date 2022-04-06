@@ -1,52 +1,35 @@
 package com.example.lesson2kotlin1.ui.fragments.characters
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.lesson2kotlin1.base.view_model_base.BaseViewModel
-import com.example.lesson2kotlin1.common.resourse.Resource
 import com.example.lesson2kotlin1.data.repositories.CharacterRepository
+import com.example.lesson2kotlin1.models.RickAndMortyResponse
 import com.example.lesson2kotlin1.models.character.RickAndMortyCharacter
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
     private val characterRepository: CharacterRepository
 ) : BaseViewModel() {
-    var isLoading: Boolean = false
-    private var page: Int = 0
 
-    private val _characterState = MutableLiveData<ArrayList<RickAndMortyCharacter>>()
-    var characterState: LiveData<ArrayList<RickAndMortyCharacter>> = _characterState
+    var page = 1
+    var isLoading: Boolean = false
+
+    private val _characterState = MutableLiveData<RickAndMortyResponse<RickAndMortyCharacter>>()
+    val characterState: LiveData<RickAndMortyResponse<RickAndMortyCharacter>> = _characterState
+
+    private val _characterLocalState = MutableLiveData<List<RickAndMortyCharacter>>()
+    val characterLocalState: LiveData<List<RickAndMortyCharacter>> = _characterLocalState
+
     fun fetchCharacters() {
         isLoading = true
-        viewModelScope.launch {
-            characterRepository.fetchCharacters(page).collect {
-                when (it) {
-                    is Resource.Loading -> {
-                        isLoading = true
-                    }
-                    is Resource.Error -> {
-                        Log.e("ololo", it.message.toString())
-                    }
-                    is Resource.Success -> {
-                        if (it.data?.info?.next != null) {
-                            isLoading = false
-                            _characterState.postValue(it.data.results)
-                            page++
-                        }
-                    }
-                }
-            }
+        characterRepository.fetchCharacter(page).collect(_characterState) {
+            page++
+            isLoading = false
         }
     }
 
-    init {
-        _characterState.value.let {
-            fetchCharacters()
-        }
-    }
+    fun getCharacters() = characterRepository.getCharacter().collect(_characterLocalState)
 }

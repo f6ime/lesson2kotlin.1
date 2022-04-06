@@ -1,7 +1,8 @@
 package com.example.lesson2kotlin1.ui.fragments.locations
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.lesson2kotlin1.R
@@ -11,7 +12,6 @@ import com.example.lesson2kotlin1.common.extension.sendData
 import com.example.lesson2kotlin1.databinding.FragmentLocationsBinding
 import com.example.lesson2kotlin1.utils.PaginationScrollListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -40,13 +40,31 @@ class LocationsFragment : BaseFragment<FragmentLocationsBinding, LocationsViewMo
 
     override fun setupObserver() {
         subscribeToLocations()
+        subscribeToLocationLocale()
     }
 
     private fun subscribeToLocations() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.locationState.observe(viewLifecycleOwner) {
-                locationAdapter.sendData(it)
-            }
+        viewModel.locationState.observe(viewLifecycleOwner) {
+            locationAdapter.sendData(it.results)
+
         }
+    }
+
+    private fun subscribeToLocationLocale() {
+        viewModel.LocationLocalState.observe(viewLifecycleOwner) {
+            locationAdapter.sendData(it)
+        }
+    }
+
+    override fun setupRequest() {
+        if (viewModel.locationState.value == null && isOnline()) viewModel.fetchLocations()
+        else viewModel.getLocations()
+    }
+
+    fun isOnline(): Boolean {
+        val cm =
+            requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
     }
 }

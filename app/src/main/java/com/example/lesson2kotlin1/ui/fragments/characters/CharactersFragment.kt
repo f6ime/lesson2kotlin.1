@@ -1,7 +1,8 @@
 package com.example.lesson2kotlin1.ui.fragments.characters
 
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.net.ConnectivityManager
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,7 +13,6 @@ import com.example.lesson2kotlin1.common.extension.sendData
 import com.example.lesson2kotlin1.databinding.FragmentCharactersBinding
 import com.example.lesson2kotlin1.utils.PaginationScrollListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CharactersFragment : BaseFragment<FragmentCharactersBinding, CharactersViewModel>(
@@ -24,6 +24,7 @@ class CharactersFragment : BaseFragment<FragmentCharactersBinding, CharactersVie
     override fun setupViews() {
         setupAdapter()
     }
+
 
     private fun setupAdapter() {
         binding.recyclerview.apply {
@@ -37,21 +38,41 @@ class CharactersFragment : BaseFragment<FragmentCharactersBinding, CharactersVie
         }
     }
 
+    override fun setupRequest() {
+        if (viewModel.characterState.value == null && isOnline()) viewModel.fetchCharacters()
+        else viewModel.getCharacters()
+    }
+
+
     override fun setupObserver() {
         subscribeToCharacters()
+        subscribeToCharactersLocale()
     }
 
     private fun subscribeToCharacters() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.characterState.observe(viewLifecycleOwner) {
-                characterAdapter.sendData(it)
-            }
+        viewModel.characterState.observe(viewLifecycleOwner) {
+            characterAdapter.sendData(it.results)
         }
     }
+
+    private fun subscribeToCharactersLocale() {
+        viewModel.characterLocalState.observe(viewLifecycleOwner) {
+            characterAdapter.sendData(it)
+        }
+    }
+
+
+    fun isOnline(): Boolean {
+        val cm = requireActivity().getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
+    }
+
 
     private fun onItemClick(id: Int) {
         findNavController().navigate(
             CharactersFragmentDirections.actionSwitchingToADetailedFragment(id)
         )
     }
+
 }

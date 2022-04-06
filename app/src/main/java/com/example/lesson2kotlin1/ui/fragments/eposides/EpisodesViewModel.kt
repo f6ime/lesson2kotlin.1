@@ -1,15 +1,12 @@
 package com.example.lesson2kotlin1.ui.fragments.eposides
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.lesson2kotlin1.base.view_model_base.BaseViewModel
-import com.example.lesson2kotlin1.common.resourse.Resource
 import com.example.lesson2kotlin1.data.repositories.EpisodesRepository
+import com.example.lesson2kotlin1.models.RickAndMortyResponse
 import com.example.lesson2kotlin1.models.episode.RickAndMortyEpisode
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,35 +16,20 @@ class EpisodesViewModel @Inject constructor(
     var isLoading: Boolean = false
     private var page: Int = 0
 
-    private val _episodesState = MutableLiveData<ArrayList<RickAndMortyEpisode>>()
-    var episodesState: LiveData<ArrayList<RickAndMortyEpisode>> = _episodesState
+
+    private val _episodesState = MutableLiveData<RickAndMortyResponse<RickAndMortyEpisode>>()
+    var episodesState: LiveData<RickAndMortyResponse<RickAndMortyEpisode>> = _episodesState
+
+    private val _episodesLocalState = MutableLiveData<List<RickAndMortyEpisode>>()
+    var episodesLocalState: LiveData<List<RickAndMortyEpisode>> = _episodesLocalState
+
     fun fetchEpisodes() {
         isLoading = true
-        viewModelScope.launch {
-            episodesRepository.fetchEpisodes(page).collect {
-                when (it) {
-
-                    is Resource.Loading -> {
-                        isLoading = true
-                    }
-                    is Resource.Error -> {
-                        Log.e("ololo", it.message.toString())
-                    }
-                    is Resource.Success -> {
-                        if (it.data?.info?.next != null) {
-                            isLoading = false
-                            _episodesState.postValue(it.data.results)
-                            page++
-                        }
-                    }
-                }
-            }
+        episodesRepository.fetchEpisode(page).collect(_episodesState) {
+            page++
+            isLoading = false
         }
     }
 
-    init {
-        if (_episodesState.value == null) {
-            fetchEpisodes()
-        }
-    }
-}
+    fun getEpisodes() = episodesRepository.getEpisode().collect(_episodesLocalState) }
+
