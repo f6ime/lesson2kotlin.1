@@ -24,16 +24,17 @@ class EpisodeFragment : BaseFragment<FragmentEpisodeBinding, EpisodesViewModel>(
         setupAdapter()
     }
 
-    private fun setupAdapter() {
-        binding.recyclerview.apply {
-            adapter = episodeAdapter
-            val linearLayoutManager = LinearLayoutManager(context)
-            layoutManager = linearLayoutManager
-            addOnScrollListener(object :
-                PaginationScrollListener(linearLayoutManager, { viewModel.fetchEpisodes() }) {
-                override fun isLoading() = viewModel.isLoading
-            })
-        }
+    private fun setupAdapter() = with(binding.recyclerview) {
+        adapter = episodeAdapter
+        val linearLayoutManager = LinearLayoutManager(context)
+        layoutManager = linearLayoutManager
+        addOnScrollListener(object :
+            PaginationScrollListener(linearLayoutManager, {
+                if (isOnline()) viewModel.fetchEpisodes()
+                else null
+            }) {
+            override fun isLoading() = viewModel.isLoading
+        })
     }
 
     override fun setupObserver() {

@@ -26,16 +26,17 @@ class LocationsFragment : BaseFragment<FragmentLocationsBinding, LocationsViewMo
         setupAdapter()
     }
 
-    private fun setupAdapter() {
-        binding.recyclerview.apply {
-            adapter = locationAdapter
-            val linearLayoutManager = LinearLayoutManager(context)
-            layoutManager = linearLayoutManager
-            addOnScrollListener(object :
-                PaginationScrollListener(linearLayoutManager, { viewModel.fetchLocations() }) {
-                override fun isLoading() = viewModel.isLoading
-            })
-        }
+    private fun setupAdapter() = with(binding.recyclerview) {
+        adapter = locationAdapter
+        val linearLayoutManager = LinearLayoutManager(context)
+        layoutManager = linearLayoutManager
+        addOnScrollListener(object :
+            PaginationScrollListener(linearLayoutManager, {
+                if (isOnline()) viewModel.fetchLocations()
+                else null
+            }) {
+            override fun isLoading() = viewModel.isLoading
+        })
     }
 
     override fun setupObserver() {

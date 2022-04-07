@@ -26,16 +26,17 @@ class CharactersFragment : BaseFragment<FragmentCharactersBinding, CharactersVie
     }
 
 
-    private fun setupAdapter() {
-        binding.recyclerview.apply {
-            adapter = characterAdapter
-            val linearLayoutManager = LinearLayoutManager(context)
-            layoutManager = linearLayoutManager
-            addOnScrollListener(object :
-                PaginationScrollListener(linearLayoutManager, { viewModel.fetchCharacters() }) {
-                override fun isLoading() = viewModel.isLoading
-            })
-        }
+    private fun setupAdapter() = with(binding.recyclerview) {
+        val linearLayoutManager = LinearLayoutManager(context)
+        layoutManager = linearLayoutManager
+        adapter = characterAdapter
+        addOnScrollListener(object :
+            PaginationScrollListener(linearLayoutManager, {
+                if (isOnline()) viewModel.fetchCharacters()
+                else null
+            }) {
+            override fun isLoading() = viewModel.isLoading
+        })
     }
 
     override fun setupRequest() {

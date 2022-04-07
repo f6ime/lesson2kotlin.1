@@ -17,7 +17,7 @@ abstract class PaginationScrollListener(
 
         if (!isLoading()) {
             if ((visibleItemCount + firstVisibleItemItemPosition) >= totalItemCount && firstVisibleItemItemPosition >= 0) {
-                doRequest()
+                doRequest?.let { it() }
             }
         }
     }
