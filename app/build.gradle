@@ -1,5 +1,5 @@
 plugins {
-    //Aplication
+    //Application
     id 'com.android.application'
     //Kotlin
     id 'org.jetbrains.kotlin.android'
@@ -15,7 +15,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.lesson2kotlin1"
+        applicationId "com.example.RickAndMorty"
         minSdk 22
         targetSdk 32
         versionCode 1

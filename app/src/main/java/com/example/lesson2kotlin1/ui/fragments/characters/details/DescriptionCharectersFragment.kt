@@ -30,7 +30,7 @@ R.layout.fragment_description_characters
     private fun subscribeToCharacters() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.fetchSingleCharacter(args.characterId).collect {
-                when (it) {
+                when (  it) {
                     is Resource.Loading -> {
                         Log.e("ololo", "Loading")
                     }

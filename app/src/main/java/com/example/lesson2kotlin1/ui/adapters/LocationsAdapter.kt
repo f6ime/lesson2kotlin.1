@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lesson2kotlin1.base.diff_utils.BaseDiffUtils
+import com.example.lesson2kotlin1.base.BaseDiffUtils
 import com.example.lesson2kotlin1.models.location.RickAndMortyLocation
 import com.example.lesson2kotlin1.databinding.ItemLocationHolderBinding
 

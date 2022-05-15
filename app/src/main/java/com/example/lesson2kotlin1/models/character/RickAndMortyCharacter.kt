@@ -2,7 +2,7 @@ package com.example.lesson2kotlin1.models.character
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.lesson2kotlin1.base.diff_model.BaseDiffModel
+import com.example.lesson2kotlin1.base.BaseDiffModel
 import com.google.gson.annotations.SerializedName
 @Entity(tableName = "character")
 data class RickAndMortyCharacter(

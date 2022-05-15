@@ -1,4 +1,4 @@
-package com.example.lesson2kotlin1.base.repository_base
+package com.example.lesson2kotlin1.base
 
 import com.example.lesson2kotlin1.common.resourse.Resource
 import kotlinx.coroutines.flow.flow

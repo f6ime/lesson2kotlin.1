@@ -1,9 +1,8 @@
 package com.example.lesson2kotlin1.data.repositories
 
-import com.example.lesson2kotlin1.base.repository_base.BaseRepository
+import com.example.lesson2kotlin1.base.BaseRepository
 import com.example.lesson2kotlin1.data.local.db.daos.CharacterDao
 import com.example.lesson2kotlin1.data.remote.apiservices.CharactersApiService
-import com.example.lesson2kotlin1.models.character.RickAndMortyCharacter
 import javax.inject.Inject
 
 class CharacterRepository @Inject constructor(

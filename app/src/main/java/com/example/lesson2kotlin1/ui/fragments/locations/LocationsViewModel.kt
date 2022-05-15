@@ -2,7 +2,7 @@ package com.example.lesson2kotlin1.ui.fragments.locations
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.lesson2kotlin1.base.view_model_base.BaseViewModel
+import com.example.lesson2kotlin1.base.BaseViewModel
 import com.example.lesson2kotlin1.data.repositories.LocationsRepository
 import com.example.lesson2kotlin1.models.RickAndMortyResponse
 import com.example.lesson2kotlin1.models.location.RickAndMortyLocation

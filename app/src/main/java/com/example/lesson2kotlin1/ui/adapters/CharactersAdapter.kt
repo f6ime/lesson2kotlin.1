@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lesson2kotlin1.R
-import com.example.lesson2kotlin1.base.diff_utils.BaseDiffUtils
+import com.example.lesson2kotlin1.base.BaseDiffUtils
 import com.example.lesson2kotlin1.common.extension.setImage
 import com.example.lesson2kotlin1.models.character.RickAndMortyCharacter
 import com.example.lesson2kotlin1.databinding.ItemCharactersHolderBinding

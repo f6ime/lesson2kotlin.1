@@ -1,4 +1,4 @@
-package com.example.lesson2kotlin1.base.diff_model
+package com.example.lesson2kotlin1.base
 
 interface BaseDiffModel {
     val id: Int
